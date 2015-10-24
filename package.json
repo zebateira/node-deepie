@@ -1,0 +1,16 @@
+{
+  "name": "deepie",
+  "version": "0.1.0",
+  "description": "A simple logger with depth.",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "mout": "^0.11.0"
+  },
+  "devDependencies": {
+    "chalk": "^1.1.1"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  }
+}
