@@ -1,10 +1,10 @@
 'use strict';
 
 var chalk  = require('chalk');
-var Deepie = require('..');
+var deepie = require('..');
 
-var deepie = new Deepie({
-    component: chalk.gray.bgBlack(' myenv '),
+deepie = deepie({
+    component: chalk.gray.bgBlack(' mycli '),
     endSeparator: chalk.black(' '),
     loggers: {
         hey:    chalk.blue,

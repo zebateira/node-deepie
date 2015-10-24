@@ -62,4 +62,6 @@ Deepie.prototype.stream = function (style) {
     return styledStream;
 };
 
-module.exports = Deepie;
+module.exports = function (options) {
+    return new Deepie(options);
+};
