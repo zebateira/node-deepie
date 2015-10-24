@@ -4,6 +4,17 @@
   "description": "A simple logger with depth.",
   "main": "index.js",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carsy/node-deepie/issues/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/carsy/node-deepie.git"
+  },
+  "keywords": [
+    "log", "logger", "cli", "depth"
+  ],
+  "author": "Zé Bateira <jlageb@gmail.com>",
   "dependencies": {
     "mout": "^0.11.0"
   },
