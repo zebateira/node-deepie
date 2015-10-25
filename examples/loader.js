@@ -17,13 +17,17 @@ var logger = deepie({
 
 logger.info('loading service...');
 
-var loadingLogger = logger.child({ component: 'loader'});
+var loadingLogger = logger.child({
+    component: { logger: chalk.blue.bgBlack, name: 'loader' }
+});
 
 loadingLogger.debug('newsletter: checking for service status...');
 
 // Status checker module
 
-var statusLogger = loadingLogger.child({ component: 'download' });
+var statusLogger = loadingLogger.child({
+    component: { logger: chalk.magenta.bgBlack, name: 'status' }
+});
 
 statusLogger.debug('newsletter: service status received');
 

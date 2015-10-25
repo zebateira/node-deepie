@@ -4,6 +4,8 @@
 
 Deepie makes it easier to add depth to your cli logging when you want more visual structure.
 
+![Example](http://i.imgur.com/MFCEh1N.png)
+
 ## Installation
 
 `$ npm install deepie --save`
@@ -106,7 +108,7 @@ deepie.done('chalk: installation done!');
 
 _Outputs_
 
-![Result of pm example](http://i.imgur.com/1RBF8CT.png)
+![Visual result of example](http://i.imgur.com/1RBF8CT.png)
 
 You can limit the amount of depth to be logged:
 
