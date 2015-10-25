@@ -56,10 +56,10 @@ logger.error('Error: failed to load!');
 ```
 
 ### `deepie.<logger>.stream()`
-Example: `fs.createReadStream('.editorconfig').pipe(deepie.stdout.stream()).pipe(process.stdout);`
-
 
 Returns a transform stream that will stream the buffer after applying the logger function on it.
+
+Example: `fs.createReadStream('.editorconfig').pipe(deepie.stdout.stream()).pipe(process.stdout);`
 
 ## Examples
 
