@@ -37,10 +37,11 @@ function Deepie(options) {
     }
 
     if (typeof options.separator === 'string') {
-        options.separator = { logger: function (c) { return c; }, value: options.separator };
+        options.separator = { logger: function (s) { return s; }, value: options.separator };
     }
 
-    options.component = mixIn({ padding: true }, options.component);
+    options.component = mixIn({ padding: true, logger: function (c) { return c; } }, options.component);
+    options.separator = mixIn({ logger: function (c) { return c; } }, options.separator);
 
     this._depth     = this._depth ? this._depth + 1 : 1;
     this._config    = options;
