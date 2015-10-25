@@ -3,11 +3,10 @@
 var chalk  = require('chalk');
 var deepie = require('..');
 
-deepie = deepie({
-    component: chalk.gray.bgBlack(' mycli '),
+var logger = deepie({
+    component: { logger: chalk.blue.bgBlack, name: 'mycli' },
     endSeparator: chalk.black(' '),
     loggers: {
-        hey:    chalk.blue,
         log:    chalk.cyan,
         info:   chalk.cyan.bind(null, '›'),
         done:   chalk.green.bind(null, '✓'),
@@ -21,17 +20,17 @@ deepie = deepie({
     }
 });
 
-deepie.info('Hey this is an info log');
-deepie.done('Hey this is a done log');
-deepie.warn('Hey this is a warn log');
-deepie.debug('Hey this is a debug log');
-deepie.trace('Hey this is a trace log');
-deepie.error('Hey this is an error log');
-deepie.run('Hey this is a run log');
+logger.info('Hey this is an info log');
+logger.done('Hey this is a done log');
+logger.warn('Hey this is a warn log');
+logger.debug('Hey this is a debug log');
+logger.trace('Hey this is a trace log');
+logger.error('Hey this is an error log');
+logger.run('Hey this is a run log');
 
-var test = deepie.child({
-    component: chalk.blue.bgBlack(' test '),
-    separator: chalk.gray.bgBlack('›'),
+var test = logger.child({
+    component: 'test',
+    separator: { logger: chalk.gray.bgBlack, value: '›' },
     loggers: {
         before: chalk.black.bgWhite,
         error: chalk.white.bgMagenta
@@ -46,16 +45,23 @@ test.debug('Hey this is a debug log with a component');
 test.trace('Hey this is a trace log with a component');
 test.error('Hey this is an error log with a component');
 
-deepie.log('Before tests, setup something');
+logger.log('Before tests, setup something');
 
 var depth = test.child({
-    component: chalk.magenta.bgBlack(' depth '),
-    separator: chalk.gray.bgBlack('~')
+    component: 'depth',
+    separator: '~'
 });
 
 depth.info('Depth 3');
 
-deepie.debug('reading editorconfig file');
+logger.debug('reading editorconfig file');
 require('fs').createReadStream('.editorconfig')
-    .pipe(deepie.stdout.stream())
+    .pipe(logger.stdout.stream())
     .pipe(process.stdout);
+
+var loader = deepie({
+    component: '[loader]',
+    loggers: { error: chalk.red }
+});
+
+loader.error('Error: failed to load!');

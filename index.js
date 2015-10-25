@@ -14,13 +14,12 @@ function streamLog(style) {
     return styledStream;
 }
 
-function log(component, separator, logger) {
-    var args;
+function renderComponent(component) {
+    return component.padding ? component.logger(' ' + component.name + ' ') : component.logger(component.name);
+}
 
-    args = Array.prototype.slice.call(arguments);
-    args.splice(0, 3);
-
-    console.log(component + separator + logger(args.join(' ')));
+function renderSeparator(separator) {
+    return separator.logger(separator.value);
 }
 
 // --------------------------------------------------------
@@ -28,39 +27,67 @@ function log(component, separator, logger) {
 function Deepie(options) {
     options = mixIn({
         loggers: {},
-        separator: '',
-        endSeparator: ' '
+        separator: ' ',
+        endSeparator: ' ',
+        depth: Infinity
     }, options);
 
-    this._config = options;
-    this._component = options.component;
+    if (typeof options.component === 'string') {
+        options.component = { logger: function (c) { return c; }, name: options.component, padding: false };
+    }
 
-    // Set log loggers
-    for(var logger in options.loggers) {
-        this[logger] = log.bind(null, this._component, this._config.endSeparator, options.loggers[logger]);
-        this[logger].stream = streamLog.bind(null, options.loggers[logger]);
+    if (typeof options.separator === 'string') {
+        options.separator = { logger: function (c) { return c; }, value: options.separator };
+    }
+
+    options.component = mixIn({ padding: true }, options.component);
+
+    this._depth     = this._depth ? this._depth + 1 : 1;
+    this._config    = options;
+    this._component = renderComponent(this._config.component) + (this._depth === 1 ? '' : renderSeparator(this._config.separator));
+
+    for(var logger in this._config.loggers) {
+        this[logger] = this._log.bind(this, this._config.loggers[logger]);
+        this[logger].stream = streamLog.bind(null, this._config.loggers[logger]);
     }
 }
 
 Deepie.prototype.child = function (options) {
-    options = options ||  {};
+    var child;
 
-    if (options.component) {
-        options.component = this._component + (options.separator || ' ') + options.component;
+    options.separator = options.separator || this._config.separator;
+
+    if (typeof options.component === 'string') {
+        options.component = merge(this._config.component, { name: options.component });
     }
 
-    return new Deepie(merge(this._config, options));
+    if (typeof options.separator === 'string') {
+        options.separator = merge(this._config.separator, { value: options.separator });
+    }
+
+    options = merge(this._config, options);
+
+    child = new Deepie(options);
+
+    child._depth = this._depth + 1;
+    child._component = this._component + (renderSeparator(options.separator) || renderSeparator(options.separator)) + renderComponent(options.component);
+
+    return child;
 };
 
-Deepie.prototype.stream = function (style) {
-    var styledStream = new stream.Transform();
+// --------------------------------------------------------
 
-    styledStream._transform = function (chunk, encoding, callback) {
-        callback(null, style(chunk));
-    };
+Deepie.prototype._log = function (logger) {
+    var args;
 
-    return styledStream;
+    args = Array.prototype.slice.call(arguments);
+    args.splice(0, 1);
+
+    this._depth <= this._config.depth &&
+        console.log(this._component + this._config.endSeparator + logger(args.join(' ')));
 };
+
+// --------------------------------------------------------
 
 module.exports = function (options) {
     return new Deepie(options);
